@@ -46,6 +46,7 @@ function WittVectorsToZqElement(F::WittVectorsFq, W::WittVectorsFqElement)
         for i in 1:prec
             padic_eq += R(teichmuller(R(vec[i])) * p^(i - 1))
         end
+    return padic_eq
     else 
         for i in 1:prec
             r = mod(i, f)
