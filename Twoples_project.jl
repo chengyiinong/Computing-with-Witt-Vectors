@@ -49,9 +49,10 @@ function WittVectorsToZqElement(F::WittVectorsFq, W::WittVectorsFqElement)
     else 
         for i in 1:prec
             r = mod(i, f)
-            padic_eq += R((teichmuller(R(vec[i])) ** (p ** (f - r))) * p^(i - 1))
+            padic_eq += R((teichmuller(R(vec[i]))^(p^(f - r))) * p^(i - 1))
         end
     return padic_eq
+    end
 end
 
 # The problem to solve: It's very hard to isolate out the leading coefficient of a p-adic number
@@ -76,21 +77,27 @@ function plus(F::WittVectorsFq, X::WittVectorsFqElement, Y::WittVectorsFqElement
         for i in 1:prec
             num = R(0)
             for j in 1:i 
-                num += R(teichmuller(R(Z_elements[j])) * p^{j - 1})
+                num += R(teichmuller(R(Z_elements[j])) * p^(j - 1))
+            end
             rem = sum - num
             Zi = lift(Zx, rem)(1) % p^i
             push!(Z_elements, Zi)
+        end
         return Z_elements
     else
-         for i in 1:prec
+        for i in 1:prec
             num = R(0)
             for j in 1:i 
                 r = mod(j, f)
-                num += R(teichmuller(R(Z_elements[j]) ** (p ** (f - r))) * p^{j - 1})
+                num += R(teichmuller(R(Z_elements[j])^(p^(f - r))) * p^(j - 1))
+            end
             rem = sum - num
-            Zi = ((lift(Zx, rem)(1) % p^i) ** p^i) % p^f
+            Zi = ((lift(Zx, rem)(1) % p^i)^p^i) % p^f
             push!(Z_elements, Zi)
+        end
         return Z_elements
+    end
+end
 
 function subtract(F::WittVectorsFq, X::WittVectorsFqElement, Y::WittVectorsFqElement)
     R = F.base_ring
@@ -108,21 +115,27 @@ function subtract(F::WittVectorsFq, X::WittVectorsFqElement, Y::WittVectorsFqEle
         for i in 1:prec
             num = R(0)
             for j in 1:i 
-                num += R(teichmuller(R(Z_elements[j])) * p^{j - 1})
+                num += R(teichmuller(R(Z_elements[j])) * p^(j - 1))
+            end
             rem = sum - num
             Zi = lift(Zx, rem)(1) % p^i
             push!(Z_elements, Zi)
+        end
         return Z_elements
     else
-         for i in 1:prec
+        for i in 1:prec
             num = R(0)
             for j in 1:i 
                 r = mod(j, f)
-                num += R(teichmuller(R(Z_elements[j]) ** (p ** (f - r))) * p^{j - 1})
+                num += R(teichmuller(R(Z_elements[j])^(p^(f - r))) * p^(j - 1))
+            end
             rem = sum - num
-            Zi = ((lift(Zx, rem)(1) % p^i) ** p^i) % p^f
+            Zi = ((lift(Zx, rem)(1) % p^i)^(p^i)) % p^f
             push!(Z_elements, Zi)
+        end
         return Z_elements
+    end
+end
 
 function multiply(F::WittVectorsFq, X::WittVectorsFqElement, Y::WittVectorsFqElement)
     R = F.base_ring
@@ -140,32 +153,41 @@ function multiply(F::WittVectorsFq, X::WittVectorsFqElement, Y::WittVectorsFqEle
         for i in 1:prec
             num = R(0)
             for j in 1:i 
-                num += R(teichmuller(R(Z_elements[j])) * p^{j - 1})
+                num += R(teichmuller(R(Z_elements[j])) * p^(j - 1))
+            end
             rem = prod - num
             Zi = lift(Zx, rem)(1) % p^i
             push!(Z_elements, Zi)
+        end
         return Z_elements
     else
-         for i in 1:prec
+        for i in 1:prec
             num = R(0)
             for j in 1:i 
                 r = mod(j, f)
-                num += R(teichmuller(R(Z_elements[j]) ** (p ** (f - r))) * p^{j - 1})
+                num += R(teichmuller(R(Z_elements[j])^(p^(f - r))) * p^(j - 1))
+            end
             rem = prod - num
-            Zi = ((lift(Zx, rem)(1) % p^i) ** p^i) % p^f
+            Zi = ((lift(Zx, rem)(1) % p^i)^(p^i)) % p^f
             push!(Z_elements, Zi)
+        end
         return Z_elements
+    end
+end
             
 function Frobenii(F::WittVectorsFq, W::WittVectorsFqElement)
     vec = WittVector(F, W)
     prec = F.precision
     p = prime(F.base_ring)
     for i in 1:prec
-        vec = vec ** p
+        vec = vec^p
+    end
     return vec 
+end
 
 function Verschiebungen(F::WittVectorsFq, W::WittVectorsFqElement)
     vec = WittVector(F, W)
     zero_arr = [0]
     img_vec = vcat(zero_arr, vec)
     return img_vec
+end
