@@ -216,7 +216,7 @@ function Frobenii(F::WittVectorsFq, W::WittVectorsFqElement)
     prec = F.precision
     p = characteristic(prime_field(R))
     for i in 1:prec
-        vec = vec^p
+        vec[i] = vec[i]^p
     end
     return vec 
 end
